@@ -63,8 +63,33 @@ function echo<T extends boolean | number | sample | SampleClass | { name: string
 
 echo(true);
 echo(100_123);
-echo({ name: 'Akash', age: 24 });
+echo({ name: 'Akash', age: 24 });       // this will give the error
 
+// keyof operator vs Object.keys()
+
+// Purpose: keyof is a TypeScript operator used for type manipulation, not runtime operations.
+
+// Functionality: It creates a union of the keys of a given type, making it available at compile time.
+
+// Usage: Commonly used with generics to create constraints or to access the keys of an object type.
+
+type Person = {
+  name: string;
+  age: number;
+};
+
+type PersonKeys = keyof Person; // 'name' | 'age'
+
+// Usage in a function to ensure key safety:
+function getValue<T, K extends keyof T>(obj: T, key: K): T[K] {
+  return obj[key];
+}
+
+const person: Person = { name: 'Alice', age: 30 };
+const Kname = getValue(person, 'name'); // Works
+// const invalid = getValue(person, 'height'); // Error: 'height' is not a key of 'Person'
+// Here, PersonKeys is a union type of the keys ('name' | 'age'), which can be used at compile time for type safety.
+// Limitations: keyof only works with known types and is available only at compile time, meaning you can’t use it directly in runtime code.
 
 /*
  * Extending Generic Classes
